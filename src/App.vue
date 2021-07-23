@@ -1,12 +1,14 @@
 <template>
   <div id="app">
-    <my-header />
+    <my-header :numCorrect="numCorrect" :numTotal="numTotal" />
     <b-container class="bv-example-row">
       <b-row>
         <b-col sm="6" offset="3">
           <question-box
-            :currentQuestion="questions[questionIdx].question"
+            v-if="questions.length"
+            :currentQuestion="questions[questionIdx]"
             @nextQuestion="indexChange"
+            :increment="increment"
         /></b-col>
       </b-row>
     </b-container>
@@ -28,12 +30,22 @@ export default {
       questions: [],
       currentQuestion: "",
       questionIdx: 0,
+      numCorrect: 0,
+      numTotal: 0,
+      // answerArray: [],
     };
   },
   methods: {
     indexChange() {
-      // this.questionIdx = Math.floor(Math.random() * this.questions.length);
-      this.questionIdx++;
+      if (this.questionIdx < 9) {
+        this.questionIdx++;
+      }
+    },
+    increment(isCorrect) {
+      if (isCorrect) {
+        this.numCorrect++;
+      }
+      this.numTotal++;
     },
   },
   mounted() {
